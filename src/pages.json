@@ -1,6 +1,13 @@
 {
 	"pages": [
 		{
+			"path": "pages/ai-chat/index",
+			"style": {
+				"navigationBarTitleText": "AI教练",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "登录",
@@ -27,6 +34,28 @@
 				"navigationBarTitleText": "我的",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/recognition/index",
+			"style": {
+				"navigationBarTitleText": "AI识别",
+				"navigationStyle": "custom"
+			}
+		},
+		
+		{
+			"path": "pages/add-record/index",
+			"style": {
+				"navigationBarTitleText": "添加训练记录",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/settings/index",
+			"style": {
+				"navigationBarTitleText": "个人设置",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"globalStyle": {
@@ -43,20 +72,20 @@
 		"list": [
 			{
 				"pagePath": "pages/home/index",
-				"iconPath": "static/logo.png",
-				"selectedIconPath": "static/logo.png",
+				"iconPath": "static/home.png",
+				"selectedIconPath": "static/homeselected.png",
 				"text": "首页"
 			},
 			{
 				"pagePath": "pages/records/index",
-				"iconPath": "static/logo.png",
-				"selectedIconPath": "static/logo.png",
+				"iconPath": "static/tainLog.png",
+				"selectedIconPath": "static/tainLogSelected.png",
 				"text": "训练记录"
 			},
 			{
 				"pagePath": "pages/me/index",
-				"iconPath": "static/logo.png",
-				"selectedIconPath": "static/logo.png",
+				"iconPath": "static/me.png",
+				"selectedIconPath": "static/meselect.png",
 				"text": "我的"
 			}
 		]

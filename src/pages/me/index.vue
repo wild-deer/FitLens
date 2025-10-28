@@ -1,5 +1,5 @@
 <template>
-  <view class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+  <view class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
     <!-- 顶部标题栏 -->
     <view class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg" :style="{ paddingTop: statusBarHeight + 'px' }">
       <view class="flex items-center px-6 py-4">
@@ -7,45 +7,48 @@
       </view>
     </view>
 
-    <!-- 用户信息卡片 -->
-    <view class="m-4 bg-white rounded-2xl shadow-lg p-6">
-      <view class="flex items-center">
-        <view class="w-16 h-16 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center">
-          <text class="text-2xl text-white font-bold">{{ userInitial }}</text>
-        </view>
-        <view class="ml-4 flex-1">
-          <text class="text-lg font-semibold text-gray-800 block">{{ userInfo.username || '用户' }}</text>
-          <text class="text-sm text-gray-500 block mt-1">{{ userInfo.email || userInfo.phone || '未设置联系方式' }}</text>
-        </view>
-      </view>
-    </view>
-
-    <!-- 功能菜单 -->
-    <view class="m-4">
-      <view class="bg-white rounded-2xl shadow-lg overflow-hidden">
-        <view 
-          v-for="item in menuItems" 
-          :key="item.id"
-          @click="handleMenuClick(item)"
-          class="flex items-center justify-between px-6 py-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors"
-          :class="item.id === menuItems.length ? '' : 'border-b border-gray-100'"
-        >
-          <view class="flex items-center">
-            <view :class="item.iconBg" class="w-10 h-10 rounded-lg flex items-center justify-center">
-              <text :class="item.iconColor" class="text-xl">{{ item.icon }}</text>
-            </view>
-            <view class="ml-3">
-              <text class="text-gray-800 font-medium block">{{ item.title }}</text>
-              <text class="text-xs text-gray-500">{{ item.desc }}</text>
-            </view>
+    <!-- 内容区域 -->
+    <view class="flex-1 pb-4">
+      <!-- 用户信息卡片 -->
+      <view class="m-4 bg-white rounded-2xl shadow-lg p-6">
+        <view class="flex items-center">
+          <view class="w-16 h-16 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center">
+            <text class="text-2xl text-white font-bold">{{ userInitial }}</text>
           </view>
-          <text class="text-gray-400 text-xl">›</text>
+          <view class="ml-4 flex-1">
+            <text class="text-lg font-semibold text-gray-800 block">{{ userInfo.username || '用户' }}</text>
+            <text class="text-sm text-gray-500 block mt-1">{{ userInfo.email || userInfo.phone || '未设置联系方式' }}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 功能菜单 -->
+      <view class="m-4">
+        <view class="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <view 
+            v-for="item in menuItems" 
+            :key="item.id"
+            @click="handleMenuClick(item)"
+            class="flex items-center justify-between px-6 py-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors"
+            :class="item.id === menuItems.length ? '' : 'border-b border-gray-100'"
+          >
+            <view class="flex items-center">
+              <view :class="item.iconBg" class="w-10 h-10 rounded-lg flex items-center justify-center">
+                <text :class="item.iconColor" class="text-xl">{{ item.icon }}</text>
+              </view>
+              <view class="ml-3">
+                <text class="text-gray-800 font-medium block">{{ item.title }}</text>
+                <text class="text-xs text-gray-500">{{ item.desc }}</text>
+              </view>
+            </view>
+            <text class="text-gray-400 text-xl">›</text>
+          </view>
         </view>
       </view>
     </view>
 
-    <!-- 退出登录按钮 -->
-    <view class="m-4 mt-6">
+    <!-- 退出登录按钮 - 固定在底部 -->
+    <view class="m-4 mt-auto">
       <view 
         @click="handleLogout"
         class="bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer"
@@ -53,29 +56,6 @@
         <view class="flex items-center justify-center px-6 py-4">
           <text class="text-red-500 font-semibold text-lg">退出登录</text>
         </view>
-      </view>
-    </view>
-
-    <!-- 统计数据 -->
-    <view class="m-4 grid grid-cols-2 gap-4">
-      <view class="bg-white rounded-2xl shadow-lg p-6">
-        <view class="flex items-center justify-between mb-3">
-          <text class="text-3xl text-blue-500 font-bold">{{ stats.workouts }}</text>
-          <view class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-            <text class="text-2xl">💪</text>
-          </view>
-        </view>
-        <text class="text-sm text-gray-600">健身记录</text>
-      </view>
-      
-      <view class="bg-white rounded-2xl shadow-lg p-6">
-        <view class="flex items-center justify-between mb-3">
-          <text class="text-3xl text-green-500 font-bold">{{ stats.days }}</text>
-          <view class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-            <text class="text-2xl">📅</text>
-          </view>
-        </view>
-        <text class="text-sm text-gray-600">持续天数</text>
       </view>
     </view>
   </view>

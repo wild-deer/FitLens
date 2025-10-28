@@ -94,3 +94,11 @@ export const app = cloudbase.init({
 - [Tailwind CSS v4 文档](https://tailwindcss.com/docs)
 - [uni-app 文档](https://uniapp.dcloud.net.cn/)
 
+# 需求
+1.拍照识别动作错误
+2.拍照识别食物热量
+3.拍照识别器械使用方式
+4.基本的聊天问答，例如：需要帮我制定训练计划等
+（前期可以直接，接个大模型，落地再调）
+5.训练日历记录，填写动作、组数、时间等信息可计算消耗。
+6.其他就一些基本功能，用户登录、基本信息填写（体重、身高等）
