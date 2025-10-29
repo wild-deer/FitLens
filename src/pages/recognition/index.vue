@@ -208,7 +208,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { recognizeAction, recognizeFood, recognizeEquipment } from '@/utils/aiService.js'
-
+// todo:识别的逻辑，还是使用workflow chat，因为要回答，或者直接增加一个上传文件的按钮
 // 获取页面参数
 const pageParams = ref({})
 if (typeof uni !== 'undefined') {

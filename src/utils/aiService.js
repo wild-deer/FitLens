@@ -165,134 +165,9 @@ export const recognizeFood = async (imagePath) => {
 export const recognizeEquipment = async (imagePath) => {
   await delay(1500)
   
-  const equipments = [
-    {
-      name: '杠铃',
-      type: 'barbell',
-      description: '自由重量训练器械，适合多种复合动作',
-      exercises: [
-        {
-          name: '杠铃深蹲',
-          targetMuscles: ['股四头肌', '臀大肌', '腘绳肌'],
-          difficulty: '中高级',
-          caloriesPerHour: 400,
-          steps: [
-            '1. 杠铃放在肩后上方斜方肌上',
-            '2. 双脚与肩同宽，脚尖略微外展',
-            '3. 保持背部挺直，核心收紧',
-            '4. 臀部向后坐，膝盖弯曲下蹲',
-            '5. 蹲至大腿与地面平行',
-            '6. 用力站起，回到起始位置'
-          ],
-          safetyTips: [
-            '始终保持背部挺直',
-            '膝盖不要内扣',
-            '重量循序渐进',
-            '使用护腰带保护下背'
-          ]
-        },
-        {
-          name: '杠铃卧推',
-          targetMuscles: ['胸大肌', '三角肌前束', '肱三头肌'],
-          difficulty: '中级',
-          caloriesPerHour: 350,
-          steps: [
-            '1. 平躺在卧推凳上',
-            '2. 双手握杠，略宽于肩',
-            '3. 将杠铃从架上推起',
-            '4. 缓慢下放至胸部',
-            '5. 用力将杠铃推起',
-            '6. 重复动作'
-          ],
-          safetyTips: [
-            '使用保护杠或找人保护',
-            '不要弹震',
-            '保持肩胛骨收紧',
-            '控制动作速度'
-          ]
-        }
-      ],
-      videoUrl: 'https://example.com/barbell-guide.mp4'
-    },
-    {
-      name: '哑铃',
-      type: 'dumbbell',
-      description: '灵活的自由重量器械，适合单侧训练和孤立动作',
-      exercises: [
-        {
-          name: '哑铃卧推',
-          targetMuscles: ['胸大肌', '三角肌', '肱三头肌'],
-          difficulty: '初中级',
-          caloriesPerHour: 320,
-          steps: [
-            '1. 平躺在卧推凳上，双手各持一只哑铃',
-            '2. 哑铃位于胸部两侧',
-            '3. 用力将哑铃向上推起',
-            '4. 在顶端短暂停留',
-            '5. 缓慢放下哑铃至起始位置',
-            '6. 重复动作'
-          ],
-          safetyTips: [
-            '选择合适的重量',
-            '保持动作控制',
-            '避免哑铃相撞',
-            '保持核心稳定'
-          ]
-        },
-        {
-          name: '哑铃弯举',
-          targetMuscles: ['肱二头肌', '肱肌'],
-          difficulty: '初级',
-          caloriesPerHour: 250,
-          steps: [
-            '1. 站立，双手各持一只哑铃',
-            '2. 手臂自然下垂，掌心向前',
-            '3. 保持上臂不动，弯曲肘部',
-            '4. 将哑铃举至肩部高度',
-            '5. 短暂停留后缓慢放下',
-            '6. 重复动作'
-          ],
-          safetyTips: [
-            '不要借助身体摆动',
-            '保持肘部固定',
-            '控制下放速度',
-            '避免锁死关节'
-          ]
-        }
-      ],
-      videoUrl: 'https://example.com/dumbbell-guide.mp4'
-    },
-    {
-      name: '史密斯机',
-      type: 'smith_machine',
-      description: '固定轨迹器械，安全性高，适合初学者',
-      exercises: [
-        {
-          name: '史密斯深蹲',
-          targetMuscles: ['股四头肌', '臀大肌'],
-          difficulty: '初中级',
-          caloriesPerHour: 380,
-          steps: [
-            '1. 将杠铃调至合适高度',
-            '2. 杠铃放在肩后斜方肌上',
-            '3. 双脚略微前移',
-            '4. 解锁杠铃，下蹲',
-            '5. 蹲至大腿与地面平行',
-            '6. 用力站起'
-          ],
-          safetyTips: [
-            '可以随时锁定杠铃',
-            '脚的位置可以靠前',
-            '适合独自训练',
-            '重量要适中'
-          ]
-        }
-      ],
-      videoUrl: 'https://example.com/smith-machine-guide.mp4'
-    }
-  ]
+
   
-  return equipments[Math.floor(Math.random() * equipments.length)]
+
 }
 
 /**
@@ -403,95 +278,204 @@ const callCozeWorkflow = async (message, history = []) => {
 }
 
 /**
- * 调用Coze工作流聊天API（备用方案）
+ * 调用Coze工作流聊天API（支持流式响应）
  * @param {string} message - 用户消息
  * @param {Array} history - 对话历史
+ * @param {Function} onProgress - 流式进度回调
  * @returns {Promise<Object>} AI回复
  */
-const callCozeBot = async (message, history = []) => {
+const callCozeBot = async (message, history = [], onProgress = null) => {
   try {
     // 生成对话名称（使用时间戳）
-    const conversationName = 's' + new Date().toISOString().replace(/[-:T.]/g, '').slice(0, 14)
+    const conversationName = "Default"
     
     // 构建additional_messages数组
     const additionalMessages = [{
       content: message,
       content_type: 'text',
       role: 'user',
-      type: 'question'
+      type: 'answer'
     }]
     
+    const requestData = {
+      workflow_id: COZE_CONFIG.workflowId,
+      app_id: COZE_CONFIG.appId,
+      parameters: {
+        CONVERSATION_NAME: conversationName,
+        USER_INPUT: message
+      },
+      additional_messages: additionalMessages
+    }
+    
+    console.log('发送请求:', JSON.stringify({
+      url: `${COZE_CONFIG.baseUrl}/workflows/chat`,
+      method: 'POST',
+      data: requestData
+    }, null, 2))
+    
+    // 检测是否在微信小程序环境
+    const isWechat = typeof wx !== 'undefined' && wx.request
+    
     const response = await new Promise((resolve, reject) => {
-      console.log(JSON.stringify({ url: `${COZE_CONFIG.baseUrl}/workflows/chat`,
-        method: 'POST',
-        header: {
-          'Authorization': `Bearer ${COZE_CONFIG.apiKey}`,
-          'Content-Type': 'application/json'
-        },
-        data: {
-          workflow_id: COZE_CONFIG.workflowId,
-          app_id: COZE_CONFIG.appId,
-          parameters: {
-            CONVERSATION_NAME: conversationName,
-            USER_INPUT: message
+      if (isWechat && onProgress) {
+        // 使用微信原生API支持流式响应
+        console.log('使用wx.request进行流式请求...')
+        
+        let buffer = '' // 缓冲区，用于存储不完整的数据
+        let responseText = ''
+        let currentEvent = ''
+        const decoder = new TextDecoder('utf-8')
+        
+        const requestTask = wx.request({
+          url: `${COZE_CONFIG.baseUrl}/workflows/chat`,
+          method: 'POST',
+          header: {
+            'Authorization': `Bearer ${COZE_CONFIG.apiKey}`,
+            'Content-Type': 'application/json'
           },
-          additional_messages: additionalMessages
-        },}, null, 2))
-      uni.request({
-        url: `${COZE_CONFIG.baseUrl}/workflows/chat`,
-        method: 'POST',
-        header: {
-          'Authorization': `Bearer ${COZE_CONFIG.apiKey}`,
-          'Content-Type': 'application/json'
-        },
-        data: {
-          workflow_id: COZE_CONFIG.workflowId,
-          app_id: COZE_CONFIG.appId,
-          parameters: {
-            CONVERSATION_NAME: conversationName,
-            USER_INPUT: message
+          data: requestData,
+          enableChunked: true, // 启用分块传输
+          success: (res) => {
+            console.log('请求完成，状态码:', res.statusCode)
+            if (res.statusCode === 200) {
+              resolve(responseText)
+            } else {
+              reject(new Error(`API请求失败: ${res.statusCode}`))
+            }
           },
-          additional_messages: additionalMessages
-        },
-        success: (res) => {
-          // TODO流式输出响应解析
-          console.log(res)
-          if (res.statusCode === 200) {
-            resolve(res.data)
-          } else {
-            reject(new Error(`API请求失败: ${res.statusCode}`))
+          fail: (err) => {
+            console.error('请求失败:', err)
+            reject(err)
           }
-        },
-        fail: (err) => {
-          reject(err)
-        }
-      })
+        })
+        
+        // 监听分块数据接收
+        requestTask.onChunkReceived((res) => {
+          try {
+            // 将ArrayBuffer转换为字符串
+            const chunk = decoder.decode(new Uint8Array(res.data), { stream: true })
+            console.log('收到数据块:', chunk)
+            
+            // 将新数据添加到缓冲区
+            buffer += chunk
+            
+            // 按行分割处理
+            const lines = buffer.split('\n')
+            // 保留最后一行（可能不完整）
+            buffer = lines.pop() || ''
+            
+            for (const line of lines) {
+              const trimmedLine = line.trim()
+              
+              if (!trimmedLine) continue
+              
+              // 解析事件类型
+              if (trimmedLine.startsWith('event:')) {
+                currentEvent = trimmedLine.substring(6).trim()
+                console.log('事件类型:', currentEvent)
+              }
+              // 解析数据
+              else if (trimmedLine.startsWith('data:')) {
+                const dataStr = trimmedLine.substring(5).trim()
+                
+                try {
+                  const data = JSON.parse(dataStr)
+                  console.log('解析数据:', { event: currentEvent, data })
+                  
+                  // 提取 conversation.message.delta 事件中的内容
+                  if (currentEvent === 'conversation.message.delta' && data.content) {
+                    responseText += data.content
+                    // 调用进度回调，实时更新UI
+                    if (onProgress) {
+                      onProgress(data.content)
+                    }
+                    console.log('累积响应:', responseText)
+                  }
+                  // 或者从 conversation.message.completed 获取完整内容
+                  else if (currentEvent === 'conversation.message.completed' && data.content && data.type === 'answer') {
+                    // 如果没有通过delta累积到内容，使用completed的完整内容
+                    if (!responseText) {
+                      responseText = data.content
+                      if (onProgress) {
+                        onProgress(data.content)
+                      }
+                      console.log('完整响应:', responseText)
+                    }
+                  }
+                } catch (e) {
+                  console.warn('解析SSE数据失败:', dataStr, e)
+                }
+              }
+            }
+          } catch (err) {
+            console.error('处理数据块失败:', err)
+          }
+        })
+      } else {
+        // 降级使用uni.request（非流式）
+        console.log('使用uni.request进行非流式请求...')
+        uni.request({
+          url: `${COZE_CONFIG.baseUrl}/workflows/chat`,
+          method: 'POST',
+          header: {
+            'Authorization': `Bearer ${COZE_CONFIG.apiKey}`,
+            'Content-Type': 'application/json'
+          },
+          data: requestData,
+          success: (res) => {
+            console.log('响应状态码:', res.statusCode)
+            console.log('响应数据:', res.data)
+            
+            if (res.statusCode === 200) {
+              resolve(res.data)
+            } else {
+              reject(new Error(`API请求失败: ${res.statusCode}`))
+            }
+          },
+          fail: (err) => {
+            reject(err)
+          }
+        })
+      }
     })
 
-    // 检查响应状态码
-    if (response.code !== 0) {
-      throw new Error(`API调用失败: ${response.msg || '未知错误'}`)
-    }
-
-    // 提取响应内容
+    // 解析响应
     let responseText = ''
     
-    // 根据Coze工作流聊天API的响应格式解析
-    if (response.data) {
-      responseText = response.data
-    } else if (response.messages && response.messages.length > 0) {
-      // 获取最后一条助手消息
-      const lastMessage = response.messages
-        .filter(msg => msg.role === 'assistant')
-        .pop()
-      responseText = lastMessage?.content || ''
-    } else if (response.output) {
-      responseText = response.output
+    if (typeof response === 'string') {
+      // 流式请求已经累积了响应文本
+      responseText = response
+    } else if (typeof response === 'object') {
+      // 处理非流式的JSON格式响应
+      console.log('解析JSON格式响应...')
+      
+      if (response.code !== undefined && response.code !== 0) {
+        throw new Error(`API调用失败: ${response.msg || '未知错误'}`)
+      }
+      
+      if (response.data) {
+        responseText = response.data
+      } else if (response.messages && response.messages.length > 0) {
+        const lastMessage = response.messages
+          .filter(msg => msg.role === 'assistant')
+          .pop()
+        responseText = lastMessage?.content || ''
+      } else if (response.output) {
+        responseText = response.output
+      }
+      
+      // 如果有进度回调，一次性返回全部内容
+      if (onProgress && responseText) {
+        onProgress(responseText)
+      }
     }
 
     if (!responseText) {
+      console.error('未能提取响应内容，原始响应:', response)
       throw new Error('未获取到有效响应')
     }
+    
+    console.log('最终提取的响应文本:', responseText)
 
     return {
       content: responseText,
@@ -508,9 +492,10 @@ const callCozeBot = async (message, history = []) => {
  * AI聊天对话 - 智能教练（接入Coze）
  * @param {string} message - 用户消息
  * @param {Array} history - 对话历史
+ * @param {Function} onProgress - 流式进度回调（可选）
  * @returns {Promise<Object>} AI回复
  */
-export const chatWithAI = async (message, history = []) => {
+export const chatWithAI = async (message, history = [], onProgress = null) => {
   // 检查配置
   if (!COZE_CONFIG.apiKey) {
     console.error('未配置Coze API Key')
@@ -524,7 +509,7 @@ export const chatWithAI = async (message, history = []) => {
   try {
     // 优先使用工作流聊天API，如果配置了workflow_id和app_id
     if (COZE_CONFIG.workflowId && COZE_CONFIG.appId) {
-      return await callCozeBot(message, history)
+      return await callCozeBot(message, history, onProgress)
     } 
     // 其次使用工作流API，如果只配置了workflow_id
     else if (COZE_CONFIG.workflowId) {
