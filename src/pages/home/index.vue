@@ -1,7 +1,8 @@
 <template>
-  <view class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 pb-20">
-    <!-- 顶部标题栏 -->
-    <view class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg" :style="{ paddingTop: statusBarHeight + 'px' }">
+  <view class="h-screen flex flex-col bg-gradient-to-br from-blue-50 to-indigo-100">
+    <!-- 顶部标题栏 固定 -->
+    <view class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
+      :style="{ paddingTop: statusBarHeight + 'px', position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000 }">
       <view class="flex items-center justify-between px-6 py-4">
         <view>
           <text class="text-2xl font-bold">FitLens</text>
@@ -9,81 +10,68 @@
         </view>
       </view>
     </view>
+    <!-- 占位高度，避免内容被头部遮挡 -->
+    <view :style="{ height: (statusBarHeight + 64) + 'px', flexShrink: 0 }"></view>
 
-    <!-- 快速统计 -->
-    <view class="m-4">
-      <view class="bg-white rounded-2xl shadow-lg p-6">
-        <text class="text-lg font-semibold text-gray-800 mb-4 block">今日数据</text>
-        <view class="flex justify-around">
-          <view class="text-center">
-            <text class="text-3xl font-bold text-blue-600 block">{{ todayStats.workouts }}</text>
-            <text class="text-sm text-gray-500 mt-1 block">训练次数</text>
-          </view>
-          <view class="text-center">
-            <text class="text-3xl font-bold text-green-600 block">{{ todayStats.calories }}</text>
-            <text class="text-sm text-gray-500 mt-1 block">消耗(kcal)</text>
-          </view>
-          <view class="text-center">
-            <text class="text-3xl font-bold text-orange-600 block">{{ todayStats.duration }}</text>
-            <text class="text-sm text-gray-500 mt-1 block">时长(分钟)</text>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <!-- AI识别功能 -->
-    <view class="m-4">
-      <text class="text-lg font-semibold text-gray-800 mb-3 block px-2">AI智能识别</text>
-      <view class="grid grid-cols-3 gap-3">
-        <view 
-          v-for="item in recognitionItems" 
-          :key="item.id"
-          @click="handleRecognitionClick(item)"
-          class="bg-white rounded-xl shadow-md p-4 text-center cursor-pointer hover:shadow-lg transition-shadow"
-        >
-          <view :class="item.bgColor" class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-2">
-            <text class="text-2xl">{{ item.icon }}</text>
-          </view>
-          <text class="text-sm font-medium text-gray-800 block">{{ item.title }}</text>
-        </view>
-      </view>
-    </view>
-
-    <!-- AI助手 -->
-    <view class="m-4">
-      <text class="text-lg font-semibold text-gray-800 mb-3 block px-2">AI助手</text>
-      <view 
-        @click="navigateTo('/pages/ai-chat/index')"
-        class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl shadow-lg p-6 cursor-pointer"
-      >
-        <view class="flex items-center justify-between">
-          <view>
-            <text class="text-white text-xl font-bold block mb-2">💬 智能教练</text>
-            <text class="text-white text-sm opacity-90 block">制定训练计划、营养建议</text>
-          </view>
-          <text class="text-white text-3xl">›</text>
-        </view>
-      </view>
-    </view>
-
-    <!-- 快速操作 -->
-    <view class="m-4">
-      <text class="text-lg font-semibold text-gray-800 mb-3 block px-2">快速操作</text>
-      <view class="bg-white rounded-2xl shadow-lg overflow-hidden">
-        <view 
-          v-for="(item, index) in quickActions" 
-          :key="item.id"
-          @click="handleQuickAction(item)"
-          class="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-gray-50"
-          :class="index < quickActions.length - 1 ? 'border-b border-gray-100' : ''"
-        >
-          <view class="flex items-center">
-            <view :class="item.bgColor" class="w-10 h-10 rounded-lg flex items-center justify-center">
-              <text class="text-xl">{{ item.icon }}</text>
+    <!-- 内容区 单独滚动条 -->
+    <view
+      style="flex: 1 1 0%; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom:5rem;"
+      class="pb-20">
+      <!-- 快速统计 -->
+      <view class="m-4">
+        <view class="bg-white rounded-2xl shadow-lg p-6">
+          <text class="text-lg font-semibold text-gray-800 mb-4 block">今日数据</text>
+          <view class="flex justify-around">
+            <view class="text-center">
+              <text class="text-3xl font-bold text-blue-600 block">{{ todayStats.workouts }}</text>
+              <text class="text-sm text-gray-500 mt-1 block">训练次数</text>
             </view>
-            <text class="ml-3 text-gray-800 font-medium">{{ item.title }}</text>
+            <view class="text-center">
+              <text class="text-3xl font-bold text-green-600 block">{{ todayStats.calories }}</text>
+              <text class="text-sm text-gray-500 mt-1 block">消耗(kcal)</text>
+            </view>
+            <view class="text-center">
+              <text class="text-3xl font-bold text-orange-600 block">{{ todayStats.duration }}</text>
+              <text class="text-sm text-gray-500 mt-1 block">时长(分钟)</text>
+            </view>
           </view>
-          <text class="text-gray-400 text-xl">›</text>
+        </view>
+      </view>
+      <!-- AI助手 -->
+      <view class="m-4">
+        <text class="text-lg font-semibold text-gray-800 mb-3 block px-2">AI助手</text>
+        <view 
+          @click="navigateTo('/pages/ai-chat/index')"
+          class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl shadow-lg p-6 cursor-pointer"
+        >
+          <view class="flex items-center justify-between">
+            <view>
+              <text class="text-white text-xl font-bold block mb-2">💬 智能教练</text>
+              <text class="text-white text-sm opacity-90 block">制定训练计划、营养建议</text>
+            </view>
+            <text class="text-white text-3xl">›</text>
+          </view>
+        </view>
+      </view>
+      <!-- 快速操作 -->
+      <view class="m-4">
+        <text class="text-lg font-semibold text-gray-800 mb-3 block px-2">快速操作</text>
+        <view class="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <view 
+            v-for="(item, index) in quickActions" 
+            :key="item.id"
+            @click="handleQuickAction(item)"
+            class="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-gray-50"
+            :class="index < quickActions.length - 1 ? 'border-b border-gray-100' : ''"
+          >
+            <view class="flex items-center">
+              <view :class="item.bgColor" class="w-10 h-10 rounded-lg flex items-center justify-center">
+                <text class="text-xl">{{ item.icon }}</text>
+              </view>
+              <text class="ml-3 text-gray-800 font-medium">{{ item.title }}</text>
+            </view>
+            <text class="text-gray-400 text-xl">›</text>
+          </view>
         </view>
       </view>
     </view>
@@ -113,31 +101,6 @@ const todayStats = ref({
   calories: 0,
   duration: 0
 })
-
-// AI识别功能项
-const recognitionItems = [
-  {
-    id: 'action',
-    title: '动作识别',
-    icon: '🤸',
-    bgColor: 'bg-blue-100',
-    type: 'action'
-  },
-  {
-    id: 'food',
-    title: '食物热量',
-    icon: '🍎',
-    bgColor: 'bg-green-100',
-    type: 'food'
-  },
-  {
-    id: 'equipment',
-    title: '器械识别',
-    icon: '🏋️',
-    bgColor: 'bg-orange-100',
-    type: 'equipment'
-  }
-]
 
 // 快速操作
 const quickActions = [
@@ -217,13 +180,6 @@ const loadTodayStats = () => {
   } catch (error) {
     console.error('加载今日统计失败:', error)
   }
-}
-
-// 处理识别功能点击
-const handleRecognitionClick = (item) => {
-  uni.navigateTo({
-    url: `/pages/recognition/index?type=${item.type}`
-  })
 }
 
 // 导航到页面

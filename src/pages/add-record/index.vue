@@ -41,7 +41,7 @@
           v-model="formData.exerciseName"
           type="text"
           placeholder="例如：深蹲、卧推等"
-          class="border border-gray-300 rounded-lg px-4 py-3 w-full"
+          class="border border-gray-300 rounded-lg px-4 py-3"
         />
       </view>
 
@@ -55,7 +55,7 @@
               v-model.number="formData.sets"
               type="number"
               placeholder="组数"
-              class="border border-gray-300 rounded-lg px-4 py-3 w-full"
+              class="border border-gray-300 rounded-lg px-4 py-3"
             />
           </view>
           <view>
@@ -64,7 +64,7 @@
               v-model.number="formData.reps"
               type="number"
               placeholder="次数"
-              class="border border-gray-300 rounded-lg px-4 py-3 w-full"
+              class="border border-gray-300 rounded-lg px-4 py-3"
             />
           </view>
         </view>
@@ -142,7 +142,7 @@
         <textarea
           v-model="formData.notes"
           placeholder="记录训练感受、身体状态等..."
-          class="border border-gray-300 rounded-lg px-4 py-3 w-full"
+          class="border border-gray-300 rounded-lg px-4 py-3"
           :maxlength="200"
           :auto-height="true"
         />
